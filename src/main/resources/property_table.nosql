@@ -1,0 +1,6 @@
+CREATE TABLE library.property ( id UUID,
+ propertyname text,
+ propertyvalue text,
+ dtproperty timestamp,
+ PRIMARY KEY (propertyname, dtproperty)
+ );

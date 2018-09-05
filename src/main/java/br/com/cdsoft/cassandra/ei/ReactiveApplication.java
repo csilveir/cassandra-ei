@@ -1,4 +1,4 @@
-package br.com.cdsoft.reactive;
+package br.com.cdsoft.cassandra.ei;
 
 
 import org.springframework.boot.SpringApplication;

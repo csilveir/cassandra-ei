@@ -1,0 +1,26 @@
+server:
+  port: 8080
+cassandra:
+  host: 172.19.0.2
+  port: 9042
+  username: cassandra
+  password: cassandra
+  keyspace: library
+
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+
+app:
+  topic: reactive
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    com.memorynotfound: DEBUG
+
+alert:
+  url: "https://hooks.slack.com/services/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"
+  imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3SQ6d6N4lPB7rv_BysMJ5q_vGYCHVCY0fgR1y98p4fWlrA_5Rmw"
