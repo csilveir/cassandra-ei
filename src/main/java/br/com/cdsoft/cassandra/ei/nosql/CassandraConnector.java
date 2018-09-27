@@ -22,7 +22,7 @@ public class CassandraConnector {
 
 
     protected void connect(final String node, final Integer port, final String username, final String password, final String keyspace) {
-        Cluster.Builder contactPoint = Cluster.builder().addContactPoint(node);
+        final Cluster.Builder contactPoint = Cluster.builder().addContactPoint(node);
         if (port != null) {
             contactPoint.withPort(port);
         }

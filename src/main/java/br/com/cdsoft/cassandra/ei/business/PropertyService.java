@@ -97,6 +97,8 @@ public class PropertyService {
 
         var session = cassandraService.getSession();
 
+
+
         var prepared =
                 session.prepare(
                         String.format(INSERT_INTO_LIBRARY_PROPERTY, cassandraService.getKeyspaceName()));
@@ -104,7 +106,7 @@ public class PropertyService {
         if (Objects.nonNull(propertyDTO.getKey()) && Objects.nonNull(propertyDTO.getValue())) {
             BoundStatement bound = prepared.bind(UUIDs.timeBased(), propertyDTO.getKey(),
                     propertyDTO.getValue(), propertyDTO.getDtProperty(), Objects.nonNull(propertyDTO.getType()) ? propertyDTO.getType().toString() : null);
-            session.execute(bound);
+            session.executeAsync(bound);
             return propertyDTO;
         }
 
