@@ -18,9 +18,15 @@ app:
 logging:
   level:
     root: INFO
-    org.springframework.web: INFO
+    org.springframework.web: DEBUG
     com.memorynotfound: DEBUG
+    org.hibernate: ERROR
 
 alert:
   url: "https://hooks.slack.com/services/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"
   imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3SQ6d6N4lPB7rv_BysMJ5q_vGYCHVCY0fgR1y98p4fWlrA_5Rmw"
+
+realtime-stream:
+  message: Real Time Stream
+  author: ITAU UNIBANCO
+

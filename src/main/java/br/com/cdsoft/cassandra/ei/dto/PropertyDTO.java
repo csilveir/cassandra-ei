@@ -31,6 +31,16 @@ public class PropertyDTO implements Serializable {
 
     private String key;
     private String value;
+
+    public TypeProperty getType() {
+        return type;
+    }
+
+    public void setType(TypeProperty type) {
+        this.type = type;
+    }
+
+    private TypeProperty type;
     public PropertyDTO() {
 
     }
@@ -69,5 +79,6 @@ public class PropertyDTO implements Serializable {
     }
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+
     private Date dtProperty;
 }

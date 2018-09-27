@@ -8,10 +8,10 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 
 @SpringBootApplication
 @EnableWebFlux
-public class ReactiveApplication {
+public class EventDrivenApplication {
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run (ReactiveApplication.class);
+        SpringApplication.run(EventDrivenApplication.class);
 
     }
 }

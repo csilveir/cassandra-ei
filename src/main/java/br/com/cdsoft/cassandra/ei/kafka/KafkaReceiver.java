@@ -11,6 +11,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class KafkaReceiver {
 
@@ -29,12 +31,26 @@ public class KafkaReceiver {
     @KafkaListener(topics = "${app.topic}")
     public void listen(@Payload String message) {
         LOG.info("received message='{}'", message);
-        System.out.println("received message='{}'" +  message);
-        try {
-            var property = objectMapper.readValue(message   , PropertyDTO.class);
-            propertyService.insertProperty(property.getKey(), property.getValue());
-            slackAlertService.send(property);
 
+        CompletableFuture.supplyAsync(() -> {
+            return processProperty(message);
+        }).thenAccept(propertyDTO -> {
+            LOG.info("Sucessfull " + propertyDTO);
+        });
+
+
+    }
+
+    public PropertyDTO processProperty(final String message) {
+
+        try {
+
+            LOG.info ("Process='{}'" + message);
+
+            var property = objectMapper.readValue(message, PropertyDTO.class);
+            propertyService.insertProperty(property);
+            slackAlertService.send(property);
+            return property;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }

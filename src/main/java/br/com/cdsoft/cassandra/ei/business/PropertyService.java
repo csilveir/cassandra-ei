@@ -1,6 +1,7 @@
 package br.com.cdsoft.cassandra.ei.business;
 
 import br.com.cdsoft.cassandra.ei.dto.PropertyDTO;
+import br.com.cdsoft.cassandra.ei.dto.TypeProperty;
 import br.com.cdsoft.cassandra.ei.nosql.CassandraService;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ public class PropertyService {
     @Autowired
     private CassandraService cassandraService;
 
-    public static final String INSERT_INTO_LIBRARY_PROPERTY = "insert into %s.property (id, propertyname, propertyvalue, dtproperty) values (?, ?, ?, ?)";
+    public static final String INSERT_INTO_LIBRARY_PROPERTY = "insert into %s.property (id, propertyname, propertyvalue, dtproperty, type) values (?, ?, ?, ?, ?)";
 
     public List<PropertyDTO> getProperties() {
 
@@ -53,12 +53,19 @@ public class PropertyService {
 
     private List<PropertyDTO> getPropertyDTOS(ArrayList<PropertyDTO> list, List<Row> all) {
         all.forEach(row -> {
-            list.add(new PropertyDTO(
+
+            PropertyDTO propertyDTO = new PropertyDTO(
                     row.getString("propertyname"),
                     row.getString("propertyvalue"),
-                    row.getTimestamp("dtproperty")
+                    row.getTimestamp("dtproperty"));
 
-            ));
+            final String type = row.getString("type");
+            if (Objects.nonNull(type))
+                propertyDTO.setType(TypeProperty.valueOf(type));
+
+            list.add(
+                    propertyDTO
+            );
         });
         return list;
     }
@@ -86,7 +93,7 @@ public class PropertyService {
 
     }
 
-    public PropertyDTO insertProperty(final String key, final String value) {
+    public PropertyDTO insertProperty(final PropertyDTO propertyDTO) {
 
         var session = cassandraService.getSession();
 
@@ -94,10 +101,9 @@ public class PropertyService {
                 session.prepare(
                         String.format(INSERT_INTO_LIBRARY_PROPERTY, cassandraService.getKeyspaceName()));
 
-        if (Objects.nonNull(key) && Objects.nonNull(value)) {
-            PropertyDTO propertyDTO = new PropertyDTO(key, value, new Date());
+        if (Objects.nonNull(propertyDTO.getKey()) && Objects.nonNull(propertyDTO.getValue())) {
             BoundStatement bound = prepared.bind(UUIDs.timeBased(), propertyDTO.getKey(),
-                    propertyDTO.getValue(), propertyDTO.getDtProperty());
+                    propertyDTO.getValue(), propertyDTO.getDtProperty(), Objects.nonNull(propertyDTO.getType()) ? propertyDTO.getType().toString() : null);
             session.execute(bound);
             return propertyDTO;
         }

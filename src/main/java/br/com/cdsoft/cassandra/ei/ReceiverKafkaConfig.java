@@ -23,7 +23,6 @@ public class ReceiverKafkaConfig {
     private String bootstrapServers;
 
 
-
     @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();

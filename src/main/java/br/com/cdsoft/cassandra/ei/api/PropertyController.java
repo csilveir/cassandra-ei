@@ -16,11 +16,11 @@ import java.util.Comparator;
 import java.util.List;
 
 @RestController
-public class SensorController {
+public class PropertyController {
 
 
     private static final int SECONDS = 3;
-    private static final Logger LOGGER = LoggerFactory.getLogger(SensorController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyController.class);
 
 
     @Autowired
