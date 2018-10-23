@@ -32,6 +32,9 @@ public class KafkaReceiver {
     public void listen(@Payload String message) {
         LOG.info("received message='{}'", message);
 
+///        if (1 > 0)         throw new RuntimeException("bla");
+
+
         CompletableFuture.supplyAsync(() -> {
             return processProperty(message);
         }).thenAccept(propertyDTO -> {

@@ -11,6 +11,13 @@ cassandra:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    consumer:
+      client-id: consumer-transaction
+      group-id: reactive
+      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit:  false
 
 app:
   topic: reactive
@@ -28,5 +35,5 @@ alert:
 
 realtime-stream:
   message: Real Time Stream
-  author: ITAU UNIBANCO
+  author: INSTITUICAO FINANCEIRA
 
