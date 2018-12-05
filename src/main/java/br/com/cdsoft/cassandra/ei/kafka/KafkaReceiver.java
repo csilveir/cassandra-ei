@@ -47,10 +47,8 @@ public class KafkaReceiver {
         try {
 
             LOG.info ("Process='{}'" + message);
-
             var property = objectMapper.readValue(message, PropertyDTO.class);
-            propertyService.insertProperty(property);
-            slackAlertService.send(property);
+            slackAlertService.send(propertyService.insertProperty(property));
             return property;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);

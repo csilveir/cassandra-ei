@@ -49,26 +49,24 @@ public class PropertyService {
         final List<Row> all = session.execute(pst.bind()
                 .setInt(LIMITED, LIMIT)).all();
 
-        return getPropertyDTOS(list, all);
+        return populateProperty(list, all);
 
     }
 
-    private List<PropertyDTO> getPropertyDTOS(ArrayList<PropertyDTO> list, List<Row> all) {
+    private List<PropertyDTO> populateProperty(ArrayList<PropertyDTO> list, List<Row> all) {
         all.forEach(row -> {
 
-            PropertyDTO propertyDTO = new PropertyDTO(
+            PropertyDTO property = new PropertyDTO(
                     row.getUUID(ID),
                     row.getString(PROPERTYNAME),
                     row.getString(PROPERTYVALUE),
                     row.getTimestamp(DTPROPERTY));
 
-            final String type = row.getString("type");
+            var type = row.getString("type");
             if (Objects.nonNull(type))
-                propertyDTO.setType(TypeProperty.valueOf(type));
+                property.setType(TypeProperty.valueOf(type));
 
-            list.add(
-                    propertyDTO
-            );
+            list.add(property);
         });
         return list;
     }
@@ -89,17 +87,16 @@ public class PropertyService {
                         .orderBy(QueryBuilder.desc(DTPROPERTY))
                         .limit(bindMarker(LIMITED)));
 
-        final List<Row> all = session.execute(pst.bind()
-                .setInt("limited", LIMIT)).all();
+        var all = session.execute(pst.bind()
+                .setInt(LIMITED, LIMIT)).all();
 
-        return getPropertyDTOS(list, all);
+        return populateProperty(list, all);
 
     }
 
     public PropertyDTO insertProperty(final PropertyDTO propertyDTO) {
 
         var session = cassandraService.getSession();
-
 
 
         var prepared =
