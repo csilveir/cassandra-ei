@@ -5,8 +5,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 public class PropertyDTO implements Serializable {
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    private UUID uuid;
 
     @Override
     public String toString() {
@@ -16,6 +27,7 @@ public class PropertyDTO implements Serializable {
                 ", dtProperty=" + dtProperty +
                 '}';
     }
+
 
     public void setKey(String key) {
         this.key = key;
@@ -50,7 +62,10 @@ public class PropertyDTO implements Serializable {
         this.value = value;
         this.dtProperty = dtProperty;
     }
-
+    public PropertyDTO(UUID uuid, String key, String value, Date dtProperty) {
+        this(key, value, dtProperty);
+        this.uuid = uuid;
+    }
     public String getKey() {
         return key;
     }

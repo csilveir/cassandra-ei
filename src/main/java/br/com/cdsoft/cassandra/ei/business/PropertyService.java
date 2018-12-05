@@ -27,6 +27,8 @@ public class PropertyService {
     public static final String LIMITED = "limited";
     public static final String PROPERTYNAME = "propertyname";
     public static final String DTPROPERTY = "dtproperty";
+    public static final String PROPERTYVALUE = "propertyvalue";
+    public static final String ID = "id";
     @Autowired
     private CassandraService cassandraService;
 
@@ -45,7 +47,7 @@ public class PropertyService {
                         .limit(bindMarker(LIMITED)));
 
         final List<Row> all = session.execute(pst.bind()
-                .setInt("limited", LIMIT)).all();
+                .setInt(LIMITED, LIMIT)).all();
 
         return getPropertyDTOS(list, all);
 
@@ -55,9 +57,10 @@ public class PropertyService {
         all.forEach(row -> {
 
             PropertyDTO propertyDTO = new PropertyDTO(
-                    row.getString("propertyname"),
-                    row.getString("propertyvalue"),
-                    row.getTimestamp("dtproperty"));
+                    row.getUUID(ID),
+                    row.getString(PROPERTYNAME),
+                    row.getString(PROPERTYVALUE),
+                    row.getTimestamp(DTPROPERTY));
 
             final String type = row.getString("type");
             if (Objects.nonNull(type))

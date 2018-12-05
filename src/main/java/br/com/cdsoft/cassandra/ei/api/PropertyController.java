@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -41,19 +43,16 @@ public class PropertyController {
 
     @GetMapping("/property")
     @ResponseBody
-    public Mono<List<PropertyDTO>> properties() {
+    public Flux<List<PropertyDTO>> properties() {
 
-        return Mono.just(
-                propertyService.getProperties()
 
-        ).timeout(Duration.ofSeconds(SECONDS))
-                .doOnSuccess(result -> {
-
-                    result.sort(Comparator.comparing(PropertyDTO::getDtProperty));
-
-                })
+        return Flux.just(propertyService.getProperties()).timeout(Duration.ofSeconds(SECONDS))
+                .sort(Comparator.comparing(property -> ((PropertyDTO) property).getDtProperty()))
+                .onErrorReturn(Collections.emptyList())
                 .doFinally(signalType -> LOGGER.info("Finally returning properties"))
                 .doOnError(throwable -> LOGGER.error(throwable.getLocalizedMessage()));
+
+
     }
 
 
